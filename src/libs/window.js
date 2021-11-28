@@ -8,6 +8,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 1920,
     height: 1080,
+    backgroundColor: "#1e1e1e",
     webPreferences: {
       preload,
     },
