@@ -13,6 +13,7 @@
     "prettier": "^2.5.0"
   },
   "dependencies": {
-    "electron": "^16.0.2"
+    "electron": "^16.0.2",
+    "promise-fs": "^2.1.1"
   }
 }

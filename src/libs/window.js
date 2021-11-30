@@ -14,8 +14,8 @@ const createWindow = () => {
     },
   })
 
-  mainWindow.loadFile(html)
-  mainWindow.webContents.openDevTools()
+  // mainWindow.loadFile(html)
+  mainWindow.loadURL("http://localhost:3000")
 }
 
 app.on("ready", createWindow)
