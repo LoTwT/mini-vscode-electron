@@ -1,8 +1,8 @@
 const { app, BrowserWindow } = require("electron")
 const path = require("path")
+const { menu } = require("./menu.js")
 
 const preload = path.resolve(__dirname, "../preload/preload")
-const html = path.resolve(__dirname, "../web/index.html")
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -14,7 +14,7 @@ const createWindow = () => {
     },
   })
 
-  // mainWindow.loadFile(html)
+  mainWindow.setMenu(menu)
   mainWindow.loadURL("http://localhost:3000")
 }
 
