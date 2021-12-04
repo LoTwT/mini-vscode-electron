@@ -11,6 +11,7 @@ const createWindow = () => {
     backgroundColor: "#1e1e1e",
     webPreferences: {
       preload,
+      spellcheck: false,
     },
   })
 
