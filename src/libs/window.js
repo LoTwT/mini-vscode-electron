@@ -1,6 +1,7 @@
-const { app, BrowserWindow } = require("electron")
 const path = require("path")
+const { app, BrowserWindow } = require("electron")
 const { menu } = require("./menu.js")
+const { initExtensions } = require("./extension")
 
 const preload = path.resolve(__dirname, "../preload/preload")
 
@@ -19,7 +20,10 @@ const createWindow = () => {
   mainWindow.loadURL("http://localhost:3000")
 }
 
-app.on("ready", createWindow)
+app.on("ready", () => {
+  createWindow()
+  initExtensions()
+})
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
