@@ -58,3 +58,10 @@ ipcRenderer.on("changeRoot", (_, root) => {
     value: root,
   })
 })
+
+ipcRenderer.on("globalChanged", (_, globals) => {
+  window.postMessage({
+    channel: "main.changeGlobals",
+    value: globals,
+  })
+})

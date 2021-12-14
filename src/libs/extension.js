@@ -1,5 +1,6 @@
 const path = require("path")
 const fs = require("promise-fs")
+const { setGlobal } = require("./globals")
 
 // 插件目录
 // win 操作系统级环境变量 %userprofile%
@@ -75,13 +76,35 @@ async function parseThemePlugin(packageJson, pluginPath, ret) {
   }
 }
 
+function mergeExtensions(arr) {
+  const res = {}
+
+  arr.forEach((extension) => {
+    for (let key in extension) {
+      if (res[key]) {
+        res[key] = res[key].concat(extension[key])
+      } else {
+        res[key] = extension[key]
+      }
+    }
+  })
+
+  return res
+}
+
 // 初始化插件相关
 const initExtensions = async () => {
   const extensionList = await getExtensionList()
+  let extensionResults = []
 
   for (let i = 0; i < extensionList.length; i++) {
     const res = await parseExtension(extensionList[i])
+    extensionResults.push(res)
   }
+
+  extensionResults = mergeExtensions(extensionResults)
+
+  setGlobal("themes", extensionResults.themes)
 }
 
 module.exports = {

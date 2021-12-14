@@ -1,10 +1,12 @@
 const path = require("path")
-const { app, BrowserWindow } = require("electron")
+const { app, BrowserWindow, ipcMain } = require("electron")
 const { menu } = require("./menu.js")
 const { initExtensions } = require("./extension")
 const { getGlobals } = require("./globals.js")
 
 const preload = path.resolve(__dirname, "../preload/preload")
+
+ipcMain.handle("getGlobals", () => getGlobals())
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -16,8 +18,6 @@ const createWindow = () => {
       spellcheck: false,
     },
   })
-
-  mainWindow.webContents.send("globalChanged", getGlobals())
 
   mainWindow.setMenu(menu)
   mainWindow.loadURL("http://localhost:3000")

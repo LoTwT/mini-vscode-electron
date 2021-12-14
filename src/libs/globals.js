@@ -6,7 +6,7 @@ function getGlobals() {
   return _globals
 }
 
-function set(key, value) {
+function setGlobal(key, value) {
   _globals[key] = value
 
   BrowserWindow.getAllWindows().forEach((win) => {
@@ -16,5 +16,5 @@ function set(key, value) {
 
 module.exports = {
   getGlobals,
-  set,
+  setGlobal,
 }
