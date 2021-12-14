@@ -59,7 +59,8 @@ const parserCategories = {
 
 // 解析主题插件
 async function parseThemePlugin(packageJson, pluginPath, ret) {
-  if (!ret.themes) ret.themes = []
+  if (!ret.themes)
+    ret.themes = [{ label: "default", uiTheme: "vs-dark", path: null }]
 
   try {
     for (let i = 0; i < packageJson.contributes.themes.length; i++) {
@@ -80,7 +81,6 @@ const initExtensions = async () => {
 
   for (let i = 0; i < extensionList.length; i++) {
     const res = await parseExtension(extensionList[i])
-    console.log(res)
   }
 }
 
