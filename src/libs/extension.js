@@ -9,7 +9,7 @@ const userHome = process.env.USERPROFILE || process.env.HOME
 const extensionsRoot = path.resolve(userHome, ".minicode/extensions")
 
 // 获取插件列表
-const getExtensionList = async () => {
+async function getExtensionList() {
   // 1. 如果没有目录，创建目录
   await fs.mkdir(extensionsRoot, { recursive: true })
 
@@ -22,8 +22,9 @@ const getExtensionList = async () => {
 }
 
 // 解析插件
-const parseExtension = async (pluginName) => {
+async function parseExtension(pluginName) {
   const pluginPath = path.resolve(extensionsRoot, pluginName)
+  const ret = {}
 
   let packageJson
 
@@ -38,6 +39,39 @@ const parseExtension = async (pluginName) => {
   }
 
   // 2. 具体解析
+  // 2.1 判断插件信息
+  for (let i = 0; i < packageJson.categories.length; i++) {
+    const category = packageJson.categories[i]
+    if (!parserCategories[category]) {
+      console.warn(`unknown plugin category: ${category}`)
+      return
+    }
+
+    await parserCategories[category](packageJson, pluginPath, ret)
+  }
+
+  return ret
+}
+
+const parserCategories = {
+  Themes: parseThemePlugin,
+}
+
+// 解析主题插件
+async function parseThemePlugin(packageJson, pluginPath, ret) {
+  if (!ret.themes) ret.themes = []
+
+  try {
+    for (let i = 0; i < packageJson.contributes.themes.length; i++) {
+      const theme = packageJson.contributes.themes[i]
+      theme.path = path.resolve(pluginPath, theme.path)
+
+      ret.themes.push(theme)
+    }
+  } catch (error) {
+    console.warn(`parse theme plugin error`, pluginPath)
+    console.error(error)
+  }
 }
 
 // 初始化插件相关
@@ -46,6 +80,7 @@ const initExtensions = async () => {
 
   for (let i = 0; i < extensionList.length; i++) {
     const res = await parseExtension(extensionList[i])
+    console.log(res)
   }
 }
 
